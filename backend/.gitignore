@@ -1,0 +1,23 @@
+### Maven / Java
+target/
+*.class
+*.log
+
+### IDEs
+.idea/
+*.iml
+.classpath
+.project
+.settings/
+
+### OS / tooling
+.DS_Store
+Thumbs.db
+
+### Spring
+*.pid
+
+### Secrets / local config (keep example files if any)
+.env
+application-local.yml
+application-local.yaml
