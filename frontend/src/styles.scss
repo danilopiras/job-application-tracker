@@ -1,0 +1,101 @@
+@use '@angular/material' as mat;
+
+:root {
+  --app-primary: #2563eb;
+  --app-primary-hover: #1d4ed8;
+  --app-primary-soft: rgba(37, 99, 235, 0.1);
+  --app-primary-muted: rgba(37, 99, 235, 0.16);
+  --app-primary-subtle: #eff6ff;
+  --app-primary-border: #bfdbfe;
+  --app-bg: #e8f2ff;
+  --app-page-gradient: linear-gradient(165deg, #dbeafe 0%, #f0f7ff 42%, #eef2ff 100%);
+  --app-surface: #ffffff;
+  --app-surface-tinted: #f8fbff;
+  --app-text: #0f172a;
+  --app-text-muted: #64748b;
+  --app-border: #c7d7f0;
+  --app-card-bg: #ffffff;
+  --app-card-border: #e5e7eb;
+  --app-card-shadow: 0 1px 3px rgba(15, 23, 42, 0.06), 0 1px 2px -1px rgba(15, 23, 42, 0.04);
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--app-page-gradient);
+  background-attachment: fixed;
+  color: var(--app-text);
+  font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+$primary: mat.$azure-palette;
+$tertiary: mat.$rose-palette;
+$theme: mat.define-theme(
+  (
+    color: (
+      theme-type: light,
+      primary: $primary,
+      tertiary: $tertiary,
+    ),
+    typography: (
+      plain-family: Inter,
+      brand-family: Inter,
+    ),
+    density: (
+      scale: 0,
+    ),
+  )
+);
+
+@include mat.core();
+@include mat.all-component-themes($theme);
+
+html {
+  --mat-sys-primary: #2563eb;
+  --mat-sys-on-primary: #ffffff;
+  --mat-sys-primary-container: #dbeafe;
+  --mat-sys-on-primary-container: #1e40af;
+  --mat-sys-inverse-primary: #93c5fd;
+  --mat-sys-primary-fixed: #dbeafe;
+  --mat-sys-primary-fixed-dim: #bfdbfe;
+  --mat-sys-surface-tint: #2563eb;
+  --mat-sys-background: #f0f7ff;
+}
+
+.mat-mdc-card {
+  border-radius: 12px !important;
+  background-color: var(--app-card-bg) !important;
+  border: 1px solid var(--app-card-border);
+  box-shadow: var(--app-card-shadow) !important;
+}
+
+.mat-mdc-table {
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.mat-mdc-table thead .mat-mdc-header-row {
+  background: linear-gradient(180deg, #eff6ff 0%, #e0edfc 100%);
+}
+
+.mat-mdc-table .mat-mdc-header-cell {
+  color: #1e3a8a;
+  font-weight: 600;
+}
+
+.mat-mdc-button-base {
+  letter-spacing: 0.2px;
+}
+
+.mat-icon {
+  font-family: 'Material Icons', sans-serif;
+  font-weight: normal;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+

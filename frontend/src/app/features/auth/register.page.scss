@@ -1,0 +1,53 @@
+.page {
+  width: 100%;
+  max-width: 420px;
+  box-sizing: border-box;
+}
+.hero {
+  margin-bottom: 16px;
+  text-align: center;
+}
+h1 {
+  margin: 0;
+  font-size: 1.5rem;
+  letter-spacing: -0.02em;
+  color: #0c1a33;
+}
+.muted {
+  color: var(--app-text-muted);
+  margin: 4px 0 0 0;
+}
+.card {
+  width: 100%;
+}
+form {
+  display: grid;
+  gap: 12px;
+  margin-top: 4px;
+}
+mat-form-field {
+  width: 100%;
+}
+button {
+  margin-top: 4px;
+}
+.footer {
+  margin: 16px 0 0 0;
+  padding-top: 16px;
+  border-top: 1px solid var(--app-card-border);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+}
+.footer__muted {
+  color: var(--app-text-muted);
+}
+.footer a {
+  color: var(--app-primary);
+  font-weight: 600;
+  text-decoration: none;
+}
+.footer a:hover {
+  text-decoration: underline;
+}

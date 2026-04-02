@@ -1,0 +1,33 @@
+<div class="page">
+  <div class="hero">
+    <h1>{{ 'auth.login.title' | transloco }}</h1>
+    <p class="muted">{{ 'app.tagline' | transloco }}</p>
+  </div>
+
+  <mat-card class="card">
+    <mat-card-content>
+      <form [formGroup]="form" (ngSubmit)="submit()">
+        <mat-form-field appearance="outline">
+          <mat-label>{{ 'auth.email' | transloco }}</mat-label>
+          <input matInput formControlName="email" type="email" autocomplete="email" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>{{ 'auth.password' | transloco }}</mat-label>
+          <input matInput formControlName="password" type="password" autocomplete="current-password" />
+        </mat-form-field>
+
+        <button mat-flat-button color="primary" type="submit" [disabled]="form.invalid || loading">
+          {{ loading ? ('common.loading' | transloco) : ('auth.login.cta' | transloco) }}
+        </button>
+
+        <a class="forgot" routerLink="/auth/forgot-password">{{ 'auth.forgot.link' | transloco }}</a>
+
+        <p class="signup">
+          <span class="signup__muted">{{ 'auth.login.noAccount' | transloco }}</span>
+          <a routerLink="/auth/register">{{ 'auth.login.signUp' | transloco }}</a>
+        </p>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>

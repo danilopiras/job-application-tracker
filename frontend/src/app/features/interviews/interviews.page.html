@@ -1,0 +1,29 @@
+<div class="hero">
+  <h1>{{ 'interviewsPage.title' | transloco }}</h1>
+  <p class="muted">{{ 'interviewsPage.subtitle' | transloco }}</p>
+</div>
+
+@if (loading()) {
+  <p>{{ 'common.loading' | transloco }}</p>
+} @else if (!rows().length) {
+  <p class="muted">{{ 'interviewsPage.empty' | transloco }}</p>
+} @else {
+  <mat-card>
+    <mat-card-content>
+      <ul class="list">
+        @for (row of rows(); track row.applicationId + '-' + row.id) {
+          <li class="item">
+            <div>
+              <div class="title">{{ row.title }} · {{ row.companyName }}</div>
+              <div class="muted">{{ row.dateTime | localizedDate: 'medium' }}</div>
+              <div class="muted">{{ ('interviewType.' + row.type) | transloco }}</div>
+            </div>
+            <a mat-stroked-button [routerLink]="['/applications', row.applicationId]">
+              {{ 'interviewsPage.open' | transloco }}
+            </a>
+          </li>
+        }
+      </ul>
+    </mat-card-content>
+  </mat-card>
+}

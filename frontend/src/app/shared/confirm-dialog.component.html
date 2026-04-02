@@ -1,0 +1,10 @@
+<h2 mat-dialog-title>{{ data.titleKey | transloco }}</h2>
+<mat-dialog-content>
+  <p>{{ data.messageKey | transloco }}</p>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button (click)="ref.close(false)">{{ (data.cancelKey || 'common.cancel') | transloco }}</button>
+  <button mat-flat-button color="warn" (click)="ref.close(true)">
+    {{ (data.confirmKey || 'common.confirm') | transloco }}
+  </button>
+</mat-dialog-actions>

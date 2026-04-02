@@ -1,0 +1,132 @@
+<div class="head">
+  <div>
+    <h1>{{ 'applications.title' | transloco }}</h1>
+    <p class="muted">{{ 'applications.subtitle' | transloco }}</p>
+  </div>
+  <a mat-flat-button color="primary" routerLink="/applications/new">
+    <mat-icon>add</mat-icon>
+    {{ 'applications.new' | transloco }}
+  </a>
+</div>
+
+<mat-card class="filters">
+  <mat-card-content>
+    <form [formGroup]="filters" class="filters__grid" (ngSubmit)="applyFilters()">
+      <mat-form-field appearance="outline" subscriptSizing="dynamic">
+        <mat-label>{{ 'applications.filter.company' | transloco }}</mat-label>
+        <input matInput formControlName="companyName" />
+      </mat-form-field>
+      <mat-form-field appearance="outline" subscriptSizing="dynamic">
+        <mat-label>{{ 'applications.filter.title' | transloco }}</mat-label>
+        <input matInput formControlName="title" />
+      </mat-form-field>
+      <mat-form-field appearance="outline" subscriptSizing="dynamic">
+        <mat-label>{{ 'applications.filter.status' | transloco }}</mat-label>
+        <mat-select formControlName="status">
+          <mat-option [value]="''">{{ 'applications.filter.anyStatus' | transloco }}</mat-option>
+          @for (s of statuses; track s) {
+            <mat-option [value]="s">{{ ('jobStatus.' + s) | transloco }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field appearance="outline" subscriptSizing="dynamic">
+        <mat-label>{{ 'applications.filter.dateFrom' | transloco }}</mat-label>
+        <input matInput type="date" formControlName="applicationDateFrom" />
+      </mat-form-field>
+      <mat-form-field appearance="outline" subscriptSizing="dynamic">
+        <mat-label>{{ 'applications.filter.dateTo' | transloco }}</mat-label>
+        <input matInput type="date" formControlName="applicationDateTo" />
+      </mat-form-field>
+      <div class="filters__actions">
+        <button mat-stroked-button type="button" (click)="clearFilters()">
+          {{ 'applications.clearFilters' | transloco }}
+        </button>
+        <button mat-flat-button color="primary" type="submit">{{ 'applications.applyFilters' | transloco }}</button>
+      </div>
+    </form>
+  </mat-card-content>
+</mat-card>
+
+<mat-card>
+  <mat-card-content>
+    @if (loading()) {
+      <p class="muted">{{ 'common.loading' | transloco }}</p>
+    } @else if (!dataSource().length) {
+      <p class="muted">{{ 'applications.noRows' | transloco }}</p>
+    } @else {
+      <div class="table-wrap">
+        <table
+          mat-table
+          matSort
+          [matSortActive]="sortActive()"
+          [matSortDirection]="sortDirection() || 'desc'"
+          [dataSource]="dataSource()"
+          (matSortChange)="onSort($event)"
+        >
+          <ng-container matColumnDef="companyName">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header="companyName">
+              {{ 'applications.table.company' | transloco }}
+            </th>
+            <td mat-cell *matCellDef="let row">{{ row.companyName }}</td>
+          </ng-container>
+          <ng-container matColumnDef="title">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header="title">
+              {{ 'applications.table.role' | transloco }}
+            </th>
+            <td mat-cell *matCellDef="let row">{{ row.title }}</td>
+          </ng-container>
+          <ng-container matColumnDef="status">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header="status">
+              {{ 'applications.table.status' | transloco }}
+            </th>
+            <td mat-cell *matCellDef="let row">
+              <mat-chip>{{ ('jobStatus.' + row.status) | transloco }}</mat-chip>
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="applicationDate">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header="applicationDate">
+              {{ 'applications.table.applied' | transloco }}
+            </th>
+            <td mat-cell *matCellDef="let row">{{ row.applicationDate | localizedDate: 'mediumDate' }}</td>
+          </ng-container>
+          <ng-container matColumnDef="lastUpdateDate">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header="lastUpdateDate">
+              {{ 'applications.table.updated' | transloco }}
+            </th>
+            <td mat-cell *matCellDef="let row">{{ row.lastUpdateDate | localizedDate: 'mediumDate' }}</td>
+          </ng-container>
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef>{{ 'applications.table.actions' | transloco }}</th>
+            <td mat-cell *matCellDef="let row">
+              <a mat-icon-button [routerLink]="['/applications', row.id]" [matTooltip]="'applications.view' | transloco">
+                <mat-icon>visibility</mat-icon>
+              </a>
+              <a mat-icon-button [routerLink]="['/applications', row.id, 'edit']" [matTooltip]="'applications.edit' | transloco">
+                <mat-icon>edit</mat-icon>
+              </a>
+              <button
+                mat-icon-button
+                type="button"
+                color="warn"
+                (click)="deleteRow(row)"
+                [matTooltip]="'applications.delete' | transloco"
+              >
+                <mat-icon>delete</mat-icon>
+              </button>
+            </td>
+          </ng-container>
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        </table>
+      </div>
+      <mat-paginator
+        [length]="totalElements()"
+        [pageIndex]="pageIndex()"
+        [pageSize]="pageSize()"
+        [pageSizeOptions]="[5, 10, 25, 50]"
+        (page)="onPage($event)"
+        showFirstLastButtons
+      />
+    }
+  </mat-card-content>
+</mat-card>

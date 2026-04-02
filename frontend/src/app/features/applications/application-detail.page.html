@@ -1,0 +1,176 @@
+<div class="head">
+  <a mat-button routerLink="/applications">
+    <mat-icon>arrow_back</mat-icon>
+    {{ 'application.detail.back' | transloco }}
+  </a>
+  <div class="head__actions">
+    <a mat-stroked-button [routerLink]="['/applications', app?.id, 'edit']">
+      <mat-icon>edit</mat-icon>
+      {{ 'applications.edit' | transloco }}
+    </a>
+    <button mat-stroked-button color="warn" type="button" (click)="deleteApp()">
+      <mat-icon>delete</mat-icon>
+      {{ 'applications.delete' | transloco }}
+    </button>
+  </div>
+</div>
+
+@if (loading) {
+  <p>{{ 'common.loading' | transloco }}</p>
+} @else if (app) {
+  <mat-card class="detail-card mb">
+    <mat-card-header class="detail-card__header">
+      <div mat-card-avatar class="detail-card__avatar">
+        <mat-icon aria-hidden="true">work_outline</mat-icon>
+      </div>
+      <mat-card-title-group class="detail-card__titles">
+        <mat-card-title>{{ app.title }}</mat-card-title>
+        <mat-card-subtitle>{{ app.companyName }}</mat-card-subtitle>
+      </mat-card-title-group>
+      <div class="detail-card__status">
+        <mat-form-field appearance="outline" class="status-field" subscriptSizing="dynamic">
+          <mat-label>{{ 'application.field.status' | transloco }}</mat-label>
+          <mat-select [value]="app.status" (selectionChange)="onStatusChange($event.value)">
+            @for (s of statuses; track s) {
+              <mat-option [value]="s">{{ ('jobStatus.' + s) | transloco }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </mat-card-header>
+    <mat-divider></mat-divider>
+    <mat-card-content class="detail-card__body">
+      <p class="detail-card__section-label">{{ 'application.detail.fieldsHeading' | transloco }}</p>
+      <div class="detail-grid">
+        <div class="detail-cell">
+          <span class="detail-cell__label">
+            <mat-icon class="detail-cell__icon" aria-hidden="true">source</mat-icon>
+            {{ 'application.field.source' | transloco }}
+          </span>
+          <span class="detail-cell__value">{{ app.source || '—' }}</span>
+        </div>
+        <div class="detail-cell">
+          <span class="detail-cell__label">
+            <mat-icon class="detail-cell__icon" aria-hidden="true">event</mat-icon>
+            {{ 'application.field.applicationDate' | transloco }}
+          </span>
+          <span class="detail-cell__value">{{ app.applicationDate | localizedDate: 'mediumDate' }}</span>
+        </div>
+        <div class="detail-cell">
+          <span class="detail-cell__label">
+            <mat-icon class="detail-cell__icon" aria-hidden="true">place</mat-icon>
+            {{ 'application.field.location' | transloco }}
+          </span>
+          <span class="detail-cell__value">{{ app.location || '—' }}</span>
+        </div>
+        <div class="detail-cell">
+          <span class="detail-cell__label">
+            <mat-icon class="detail-cell__icon" aria-hidden="true">payments</mat-icon>
+            {{ 'application.field.salaryExpectation' | transloco }}
+          </span>
+          <span class="detail-cell__value">{{ app.salaryExpectation || '—' }}</span>
+        </div>
+      </div>
+      <div class="detail-notes">
+        <span class="detail-notes__label">
+          <mat-icon class="detail-cell__icon" aria-hidden="true">notes</mat-icon>
+          {{ 'application.field.notes' | transloco }}
+        </span>
+        <div class="detail-notes__body">{{ app.notes || '—' }}</div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card class="interviews-card">
+    <mat-card-header class="interviews-card__header">
+      <div mat-card-avatar class="interviews-card__avatar">
+        <mat-icon aria-hidden="true">calendar_month</mat-icon>
+      </div>
+      <mat-card-title-group>
+        <mat-card-title>{{ 'application.interviews.title' | transloco }}</mat-card-title>
+        <mat-card-subtitle>{{ 'application.interviews.subtitle' | transloco }}</mat-card-subtitle>
+      </mat-card-title-group>
+    </mat-card-header>
+    <mat-divider></mat-divider>
+    <mat-card-content class="interviews-card__body">
+      <section class="interviews-card__section" aria-labelledby="interviews-list-heading">
+        <h3 id="interviews-list-heading" class="interviews-card__section-title">
+          {{ 'application.interviews.listHeading' | transloco }}
+        </h3>
+        @if (interviewRows.length) {
+          <div class="it-table-wrap">
+            <table mat-table [dataSource]="interviewRows" class="it-table">
+              <ng-container matColumnDef="dateTime">
+                <th mat-header-cell *matHeaderCellDef>{{ 'interview.datetime' | transloco }}</th>
+                <td mat-cell *matCellDef="let row">{{ row.dateTime | localizedDate: 'medium' }}</td>
+              </ng-container>
+              <ng-container matColumnDef="type">
+                <th mat-header-cell *matHeaderCellDef>{{ 'interview.type' | transloco }}</th>
+                <td mat-cell *matCellDef="let row">{{ ('interviewType.' + row.type) | transloco }}</td>
+              </ng-container>
+              <ng-container matColumnDef="interviewer">
+                <th mat-header-cell *matHeaderCellDef>{{ 'interview.interviewer' | transloco }}</th>
+                <td mat-cell *matCellDef="let row">{{ row.interviewer || '—' }}</td>
+              </ng-container>
+              <ng-container matColumnDef="actions">
+                <th mat-header-cell *matHeaderCellDef></th>
+                <td mat-cell *matCellDef="let row">
+                  <button mat-icon-button type="button" (click)="editInterview(row)" [disabled]="editingId === row.id">
+                    <mat-icon>edit</mat-icon>
+                  </button>
+                  <button mat-icon-button type="button" color="warn" (click)="removeInterview(row)">
+                    <mat-icon>delete</mat-icon>
+                  </button>
+                </td>
+              </ng-container>
+              <tr mat-header-row *matHeaderRowDef="interviewColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: interviewColumns"></tr>
+            </table>
+          </div>
+        } @else {
+          <p class="muted interviews-card__empty">{{ 'application.interviews.empty' | transloco }}</p>
+        }
+      </section>
+
+      <mat-divider class="interviews-card__divider"></mat-divider>
+
+      <section class="interviews-card__section interviews-card__section--form" aria-labelledby="interviews-form-heading">
+        <h3 id="interviews-form-heading" class="interviews-card__section-title">
+          {{ 'application.interviews.addOrEdit' | transloco }}
+        </h3>
+        <form [formGroup]="interviewForm" (ngSubmit)="saveInterview()" class="int-form">
+          <mat-form-field appearance="outline">
+            <mat-label>{{ 'interview.datetime' | transloco }}</mat-label>
+            <input matInput type="datetime-local" formControlName="dateTime" />
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>{{ 'interview.type' | transloco }}</mat-label>
+            <mat-select formControlName="type">
+              @for (t of interviewTypes; track t) {
+                <mat-option [value]="t">{{ ('interviewType.' + t) | transloco }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>{{ 'interview.interviewer' | transloco }}</mat-label>
+            <input matInput formControlName="interviewer" />
+          </mat-form-field>
+          <mat-form-field appearance="outline" class="full">
+            <mat-label>{{ 'interview.notes' | transloco }}</mat-label>
+            <textarea matInput rows="2" formControlName="notes"></textarea>
+          </mat-form-field>
+          <div class="int-actions">
+            @if (editingId) {
+              <button mat-stroked-button type="button" (click)="cancelInterviewEdit()">
+                {{ 'common.cancel' | transloco }}
+              </button>
+            }
+            <button mat-flat-button color="primary" type="submit" [disabled]="interviewForm.invalid || intSaving">
+              {{ intSaving ? ('common.loading' | transloco) : ('interview.save' | transloco) }}
+            </button>
+          </div>
+        </form>
+      </section>
+    </mat-card-content>
+  </mat-card>
+}

@@ -1,0 +1,64 @@
+<mat-sidenav-container class="shell">
+  <mat-sidenav [mode]="isSmall() ? 'over' : 'side'" [opened]="!isSmall() && sidenavOpen()">
+    <div class="brand">
+      <div class="brand__title">Job Application Tracker</div>
+      <div class="brand__subtitle">{{ 'app.tagline' | transloco }}</div>
+    </div>
+
+    <mat-nav-list class="nav-list">
+      <a mat-list-item routerLink="/dashboard" routerLinkActive="active">
+        <mat-icon matListItemIcon>dashboard</mat-icon>
+        <span matListItemTitle>{{ 'nav.dashboard' | transloco }}</span>
+      </a>
+      <a mat-list-item routerLink="/applications" routerLinkActive="active">
+        <mat-icon matListItemIcon>work</mat-icon>
+        <span matListItemTitle>{{ 'nav.applications' | transloco }}</span>
+      </a>
+      <a mat-list-item routerLink="/interviews" routerLinkActive="active">
+        <mat-icon matListItemIcon>event</mat-icon>
+        <span matListItemTitle>{{ 'nav.interviews' | transloco }}</span>
+      </a>
+      <a mat-list-item routerLink="/settings" routerLinkActive="active">
+        <mat-icon matListItemIcon>settings</mat-icon>
+        <span matListItemTitle>{{ 'nav.settings' | transloco }}</span>
+      </a>
+    </mat-nav-list>
+  </mat-sidenav>
+
+  <mat-sidenav-content>
+    <mat-toolbar class="topbar">
+      <button mat-icon-button (click)="toggleSidenav()" [attr.aria-label]="'nav.toggle' | transloco">
+        <mat-icon>menu</mat-icon>
+      </button>
+      <span class="topbar__title">Job Application Tracker</span>
+      <span class="spacer"></span>
+
+      <button mat-button [matMenuTriggerFor]="langMenu">
+        <mat-icon>language</mat-icon>
+        <span class="hide-sm">{{ activeLang().toUpperCase() }}</span>
+      </button>
+      <mat-menu #langMenu="matMenu">
+        @for (lang of langs; track lang) {
+          <button mat-menu-item (click)="setLang(lang)">
+            <span>{{ ('lang.' + lang) | transloco }}</span>
+          </button>
+        }
+      </mat-menu>
+
+      <button mat-button [matMenuTriggerFor]="userMenu">
+        <mat-icon>account_circle</mat-icon>
+        <span class="hide-sm">{{ userEmail() }}</span>
+      </button>
+      <mat-menu #userMenu="matMenu">
+        <button mat-menu-item (click)="logout()">
+          <mat-icon>logout</mat-icon>
+          <span>{{ 'auth.logout' | transloco }}</span>
+        </button>
+      </mat-menu>
+    </mat-toolbar>
+
+    <div class="content">
+      <router-outlet />
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>

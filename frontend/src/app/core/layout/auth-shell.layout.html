@@ -1,0 +1,22 @@
+<div class="auth-shell">
+  <mat-toolbar class="topbar">
+    <span class="topbar__title">Job Application Tracker</span>
+    <span class="spacer"></span>
+
+    <button mat-button [matMenuTriggerFor]="langMenu">
+      <mat-icon>language</mat-icon>
+      <span class="hide-sm">{{ activeLang().toUpperCase() }}</span>
+    </button>
+    <mat-menu #langMenu="matMenu">
+      @for (lang of langs; track lang) {
+        <button mat-menu-item (click)="setLang(lang)">
+          <span>{{ ('lang.' + lang) | transloco }}</span>
+        </button>
+      }
+    </mat-menu>
+  </mat-toolbar>
+
+  <main class="auth-shell__main">
+    <router-outlet />
+  </main>
+</div>

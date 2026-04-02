@@ -1,0 +1,56 @@
+.auth-shell {
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  background: transparent;
+}
+
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  padding-left: 16px;
+  padding-right: 8px;
+  --mat-toolbar-container-background-color: transparent;
+  background: linear-gradient(180deg, #ffffff 0%, var(--app-surface-tinted) 100%) !important;
+  color: var(--app-text) !important;
+  border-bottom: 1px solid var(--app-primary-border);
+  box-shadow: 0 1px 4px rgba(15, 23, 42, 0.06);
+}
+.topbar .mat-mdc-button {
+  color: var(--app-text-muted);
+}
+.topbar .mat-mdc-button:hover {
+  color: var(--app-primary);
+}
+.topbar__title {
+  font-weight: 600;
+  letter-spacing: 0.2px;
+  color: #1e3a8a;
+}
+.spacer {
+  flex: 1;
+}
+
+.auth-shell__main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 20px 32px;
+  box-sizing: border-box;
+  overflow: auto;
+}
+
+.hide-sm {
+  display: inline;
+}
+@media (max-width: 720px) {
+  .auth-shell__main {
+    padding: 16px;
+  }
+  .hide-sm {
+    display: none;
+  }
+}

@@ -1,0 +1,95 @@
+.shell {
+  height: 100dvh;
+  background: transparent;
+}
+
+mat-sidenav {
+  width: 280px;
+  border-right: 1px solid var(--app-primary-border);
+  background: linear-gradient(185deg, #ffffff 0%, #f0f7ff 55%, #e8f2ff 100%);
+  box-shadow: 4px 0 24px rgba(37, 99, 235, 0.06);
+}
+
+.brand {
+  margin: 12px 12px 8px 12px;
+  padding: 14px 14px 12px 16px;
+  border-radius: 12px;
+  border: 1px solid var(--app-primary-border);
+  background: linear-gradient(135deg, #ffffff 0%, var(--app-primary-subtle) 100%);
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.08);
+}
+.brand__title {
+  font-weight: 700;
+  color: var(--app-primary);
+  letter-spacing: -0.02em;
+}
+.brand__subtitle {
+  margin-top: 6px;
+  color: var(--app-text-muted);
+  font-size: 12px;
+}
+
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  --mat-toolbar-container-background-color: transparent;
+  background: linear-gradient(180deg, #ffffff 0%, var(--app-surface-tinted) 100%) !important;
+  color: var(--app-text) !important;
+  border-bottom: 1px solid var(--app-primary-border);
+  box-shadow: 0 1px 4px rgba(15, 23, 42, 0.06);
+}
+.topbar .mat-mdc-button,
+.topbar .mat-mdc-icon-button {
+  color: var(--app-text-muted);
+}
+.topbar .mat-mdc-button:hover,
+.topbar .mat-mdc-icon-button:hover {
+  color: var(--app-primary);
+}
+.topbar__title {
+  margin-left: 8px;
+  font-weight: 600;
+  letter-spacing: 0.2px;
+  color: #1e3a8a;
+}
+.spacer {
+  flex: 1;
+}
+
+.content {
+  padding: 24px 20px 32px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+mat-sidenav-content {
+  background: transparent;
+}
+
+.nav-list a[mat-list-item].mdc-list-item {
+  align-items: center;
+  border-radius: 8px;
+  margin: 2px 8px;
+}
+
+a.active {
+  background: linear-gradient(90deg, var(--app-primary-soft) 0%, rgba(37, 99, 235, 0.04) 100%);
+  box-shadow: inset 3px 0 0 var(--app-primary);
+}
+
+a.active mat-icon {
+  color: var(--app-primary);
+}
+
+.hide-sm {
+  display: inline;
+}
+@media (max-width: 720px) {
+  .content {
+    padding: 16px;
+  }
+  .hide-sm {
+    display: none;
+  }
+}

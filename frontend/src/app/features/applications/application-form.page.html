@@ -1,0 +1,94 @@
+<div class="page-heading page-heading--accent">
+  <div class="page-heading__top">
+    <a mat-button [routerLink]="backLink" class="back">
+      <mat-icon>arrow_back</mat-icon>
+      {{ (isEdit ? 'application.form.backFromEdit' : 'application.form.back') | transloco }}
+    </a>
+    @if (!loading && form.dirty) {
+      <span class="unsaved-chip">{{ 'application.form.unsavedChanges' | transloco }}</span>
+    }
+  </div>
+  <h1>{{ isEdit ? ('application.form.titleEdit' | transloco) : ('application.form.titleCreate' | transloco) }}</h1>
+  @if (isEdit) {
+    <p class="muted">{{ 'application.form.subtitleEdit' | transloco }}</p>
+    @if (loadedMeta?.lastUpdateDate) {
+      <p class="meta-line">
+        <mat-icon class="meta-line__icon" aria-hidden="true">update</mat-icon>
+        <span
+          ><span class="meta-line__label">{{ 'application.form.lastUpdatedLabel' | transloco }}</span>
+          {{ loadedMeta?.lastUpdateDate | localizedDate: 'medium' }}</span
+        >
+      </p>
+    }
+  } @else {
+    <p class="muted">{{ 'application.form.subtitleCreate' | transloco }}</p>
+  }
+</div>
+
+<mat-card class="form-card form-card--accent">
+  @if (!loading) {
+    <mat-card-header class="form-card__header">
+      <div mat-card-avatar class="form-card__avatar">
+        <mat-icon aria-hidden="true">{{ isEdit ? 'edit_note' : 'post_add' }}</mat-icon>
+      </div>
+      <mat-card-title-group class="form-card__titles">
+        <mat-card-title>{{ form.controls.title.value || '—' }}</mat-card-title>
+        <mat-card-subtitle>{{ form.controls.companyName.value || '—' }}</mat-card-subtitle>
+      </mat-card-title-group>
+    </mat-card-header>
+    <mat-divider />
+  }
+  <mat-card-content [class.form-card__content--with-header]="!loading">
+    @if (loading) {
+      <p class="muted">{{ 'common.loading' | transloco }}</p>
+    } @else {
+      <form [formGroup]="form" (ngSubmit)="save()" class="grid">
+        <p class="form-section-label">{{ 'application.detail.fieldsHeading' | transloco }}</p>
+        <mat-form-field appearance="outline" subscriptSizing="dynamic">
+          <mat-label>{{ 'application.field.title' | transloco }}</mat-label>
+          <input matInput formControlName="title" />
+        </mat-form-field>
+        <mat-form-field appearance="outline" subscriptSizing="dynamic">
+          <mat-label>{{ 'application.field.company' | transloco }}</mat-label>
+          <input matInput formControlName="companyName" />
+        </mat-form-field>
+        <mat-form-field appearance="outline" subscriptSizing="dynamic">
+          <mat-label>{{ 'application.field.source' | transloco }}</mat-label>
+          <input matInput formControlName="source" />
+        </mat-form-field>
+        <mat-form-field appearance="outline" subscriptSizing="dynamic">
+          <mat-label>{{ 'application.field.status' | transloco }}</mat-label>
+          <mat-select formControlName="status">
+            @for (s of statuses; track s) {
+              <mat-option [value]="s">{{ ('jobStatus.' + s) | transloco }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field appearance="outline" subscriptSizing="dynamic">
+          <mat-label>{{ 'application.field.applicationDate' | transloco }}</mat-label>
+          <input matInput type="date" formControlName="applicationDate" />
+        </mat-form-field>
+        <mat-form-field appearance="outline" subscriptSizing="dynamic">
+          <mat-label>{{ 'application.field.location' | transloco }}</mat-label>
+          <input matInput formControlName="location" />
+        </mat-form-field>
+        <mat-form-field appearance="outline" subscriptSizing="dynamic">
+          <mat-label>{{ 'application.field.salaryExpectation' | transloco }}</mat-label>
+          <input matInput formControlName="salaryExpectation" />
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="full" subscriptSizing="dynamic">
+          <mat-label>{{ 'application.field.notes' | transloco }}</mat-label>
+          <textarea matInput rows="4" formControlName="notes"></textarea>
+        </mat-form-field>
+        <div class="actions">
+          <button mat-stroked-button type="button" [routerLink]="backLink">
+            {{ 'common.cancel' | transloco }}
+          </button>
+          <button mat-flat-button color="primary" type="submit" [disabled]="form.invalid || saving">
+            {{ saving ? ('common.loading' | transloco) : ('application.form.save' | transloco) }}
+          </button>
+        </div>
+      </form>
+    }
+  </mat-card-content>
+</mat-card>
