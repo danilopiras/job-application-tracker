@@ -1,44 +1,5 @@
-server:
-  port: 9000
-
-cors:
-  allowed-origins: "http://localhost:4200"
-
-# JWT - in production use env vars (e.g. JWT_SECRET)
-jwt:
-  secret: ${JWT_SECRET:change-me-in-production-use-long-secret-key}
-  access-expiration-ms: ${JWT_ACCESS_EXPIRATION_MS:900000}
-  refresh-expiration-ms: ${JWT_REFRESH_EXPIRATION_MS:1209600000}
-
-# Reset password link base URL (frontend page)
-app:
-  reset-password:
-    base-url: ${RESET_PASSWORD_BASE_URL:http://localhost:4200/reset-password}
-
+# Profilo attivo: impostato dal property Maven spring.profiles.active (default test, build prod con -Pprod).
+# Override runtime: variabile d'ambiente SPRING_PROFILES_ACTIVE o -Dspring.profiles.active=...
 spring:
-  mail:
-    host: localhost
-    port: 1025
-    username:
-    password:
-    properties:
-      mail:
-        smtp:
-          auth: false
-          starttls:
-            enable: false
-          connectiontimeout: 5000
-          timeout: 3000
-          writetimeout: 5000    
-  datasource:
-    url: jdbc:postgresql://localhost:5433/jobtracker
-    username: jobtracker
-    password: jobtracker
-  jpa:
-    database-platform: org.hibernate.dialect.PostgreSQLDialect
-    hibernate:
-      ddl-auto: update
-    properties:
-      hibernate:
-        format_sql: true
-    show-sql: true
+  profiles:
+    active: @spring.profiles.active@
