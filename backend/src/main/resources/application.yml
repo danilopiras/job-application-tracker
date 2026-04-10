@@ -1,5 +1,3 @@
-# Profilo attivo: impostato dal property Maven spring.profiles.active (default test, build prod con -Pprod).
-# Override runtime: variabile d'ambiente SPRING_PROFILES_ACTIVE o -Dspring.profiles.active=...
 spring:
   profiles:
     active: @spring.profiles.active@

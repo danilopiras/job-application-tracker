@@ -162,7 +162,7 @@ public class AuthServiceImpl implements AuthService {
         try {
             mailSender.send(message);
         } catch (Exception e) {
-            log.error("Error while sending password reset email. userId={}, email={}, token={}", user.getId(), user.getEmail(), token, e);
+            log.error("Error while sending password reset email. userId={}, email={}", user.getId(), user.getEmail(), e);
         }
     }
 

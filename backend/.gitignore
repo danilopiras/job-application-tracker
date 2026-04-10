@@ -17,7 +17,9 @@ Thumbs.db
 ### Spring
 *.pid
 
-### Secrets / local config (keep example files if any)
+### Secrets / local config
 .env
+.env.production
+application-prod.env
 application-local.yml
 application-local.yaml

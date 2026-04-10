@@ -1,26 +1,24 @@
 server:
-  port: 9000
+  port: ${SERVER_PORT:9000}
 
 cors:
-  allowed-origins: "http://localhost:4200"
+  allowed-origins: ${CORS_ALLOWED_ORIGINS:http://localhost:4200}
 
-# JWT - in production use env vars (e.g. JWT_SECRET)
 jwt:
-  secret: ${JWT_SECRET:change-me-in-production-use-long-secret-key}
+  secret: ${JWT_SECRET:change-me-in-local-dev-only}
   access-expiration-ms: ${JWT_ACCESS_EXPIRATION_MS:900000}
   refresh-expiration-ms: ${JWT_REFRESH_EXPIRATION_MS:1209600000}
 
-# Reset password link base URL (frontend page)
 app:
   reset-password:
     base-url: ${RESET_PASSWORD_BASE_URL:http://localhost:4200/reset-password}
 
 spring:
   mail:
-    host: localhost
-    port: 1025
-    username:
-    password:
+    host: ${MAIL_HOST:localhost}
+    port: ${MAIL_PORT:1025}
+    username: ${MAIL_USERNAME:}
+    password: ${MAIL_PASSWORD:}
     properties:
       mail:
         smtp:
@@ -31,9 +29,9 @@ spring:
           timeout: 3000
           writetimeout: 5000
   datasource:
-    url: jdbc:postgresql://localhost:5433/jobtracker
-    username: jobtracker
-    password: jobtracker
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5433/jobtracker}
+    username: ${SPRING_DATASOURCE_USERNAME:jobtracker}
+    password: ${SPRING_DATASOURCE_PASSWORD:jobtracker}
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
