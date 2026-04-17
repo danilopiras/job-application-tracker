@@ -32,7 +32,7 @@ services:
       MAIL_HOST: mailhog
       MAIL_PORT: "1025"
       MAIL_FROM: noreply@jobtracker.local
-      JWT_SECRET: "local-dev-jwt-hmac-sha256-needs-at-least-32-chars"
+      JWT_SECRET: "Good-luck-with-your-job-hunt-and-all-the-best"
     ports:
       - "9000:9000"
     depends_on:
