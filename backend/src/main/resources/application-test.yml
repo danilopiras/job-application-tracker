@@ -12,6 +12,8 @@ jwt:
 app:
   reset-password:
     base-url: ${RESET_PASSWORD_BASE_URL:http://localhost:4200/reset-password}
+  mail:
+    from: ${MAIL_FROM:}
 
 spring:
   mail:

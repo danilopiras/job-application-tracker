@@ -12,6 +12,9 @@ jwt:
 app:
   reset-password:
     base-url: ${RESET_PASSWORD_BASE_URL}
+  mail:
+    # Optional: set MAIL_FROM in the environment (e.g. noreply@yourdomain.com). If unset, the SMTP default applies.
+    from: ${MAIL_FROM:}
 
 spring:
   mail:

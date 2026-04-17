@@ -26,6 +26,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import java.security.SecureRandom;
 import java.time.Instant;
@@ -63,6 +64,9 @@ public class AuthServiceImpl implements AuthService {
     @Value("${app.reset-password.base-url:http://localhost:4200/reset-password}")
     private String resetPasswordBaseUrl;
 
+    @Value("${app.mail.from:}")
+    private String mailFrom;
+
     @Override
     @Transactional
     public AuthResponseDto register(RegisterRequestDto dto) {
@@ -73,6 +77,7 @@ public class AuthServiceImpl implements AuthService {
         user.setEmail(dto.getEmail().trim().toLowerCase());
         user.setPassword(passwordEncoder.encode(dto.getPassword()));
         User saved = userRepository.save(user);
+        sendWelcomeEmail(saved);
         return buildAuthResponse(saved);
     }
 
@@ -153,17 +158,7 @@ public class AuthServiceImpl implements AuthService {
         passwordResetTokenRepository.save(resetToken);
 
         String link = resetPasswordBaseUrl + "?token=" + token;
-        SimpleMailMessage message = new SimpleMailMessage();
-        // TODO: to delete in production
-        message.setFrom("noreply@jobtracker.com");
-        message.setTo(user.getEmail());
-        message.setSubject("Password reset - Job Application Tracker");
-        message.setText("To reset your password, use the following link (valid for " + RESET_TOKEN_EXPIRATION_HOURS + " hour(s)):\n\n" + link);
-        try {
-            mailSender.send(message);
-        } catch (Exception e) {
-            log.error("Error while sending password reset email. userId={}, email={}", user.getId(), user.getEmail(), e);
-        }
+        sendPasswordResetEmail(user, link);
     }
 
     @Override
@@ -179,6 +174,9 @@ public class AuthServiceImpl implements AuthService {
         resetToken.setUsed(true);
         passwordResetTokenRepository.save(resetToken);
     }
+
+
+    /* PRIVATE METHODS */
 
     private AuthResponseDto buildAuthResponse(User user) {
         String accessToken = jwtService.generateAccessToken(user);
@@ -201,6 +199,46 @@ public class AuthServiceImpl implements AuthService {
                 user.getId(),
                 user.getEmail()
         );
+    }
+
+    private void sendPasswordResetEmail(User user, String resetLink) {
+        SimpleMailMessage message = new SimpleMailMessage();
+        applyFromIfConfigured(message);
+        message.setTo(user.getEmail());
+        message.setSubject("Password reset - Job Application Tracker");
+        message.setText(
+                "To reset your password, use the following link (valid for "
+                        + RESET_TOKEN_EXPIRATION_HOURS
+                        + " hour(s)):\n\n"
+                        + resetLink);
+        try {
+            mailSender.send(message);
+        } catch (Exception e) {
+            log.error("Error while sending password reset email. userId={}, email={}", user.getId(), user.getEmail(), e);
+        }
+    }
+
+    private void sendWelcomeEmail(User user) {
+        SimpleMailMessage message = new SimpleMailMessage();
+        applyFromIfConfigured(message);
+        message.setTo(user.getEmail());
+        message.setSubject("Welcome to Job Application Tracker");
+        message.setText(
+                "Hi,\n\n"
+                        + "Thank you for registering. Your account has been created successfully.\n\n"
+                        + "Good luck with your job search!\n\n"
+                        + "— Job Application Tracker");
+        try {
+            mailSender.send(message);
+        } catch (Exception e) {
+            log.error("Error while sending welcome email. userId={}, email={}", user.getId(), user.getEmail(), e);
+        }
+    }
+
+    private void applyFromIfConfigured(SimpleMailMessage message) {
+        if (StringUtils.hasText(mailFrom)) {
+            message.setFrom(mailFrom.trim());
+        }
     }
 
     private static String generateResetToken() {

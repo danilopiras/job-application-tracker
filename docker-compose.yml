@@ -31,6 +31,7 @@ services:
       CORS_ALLOWED_ORIGINS: "http://localhost:4200,http://127.0.0.1:4200,http://localhost,http://127.0.0.1"
       MAIL_HOST: mailhog
       MAIL_PORT: "1025"
+      MAIL_FROM: noreply@jobtracker.local
       JWT_SECRET: "local-dev-jwt-hmac-sha256-needs-at-least-32-chars"
     ports:
       - "9000:9000"
