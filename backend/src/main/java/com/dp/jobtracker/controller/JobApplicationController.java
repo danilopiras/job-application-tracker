@@ -4,8 +4,11 @@ import com.dp.jobtracker.model.dto.JobApplicationRequestDto;
 import com.dp.jobtracker.model.dto.JobApplicationResponseDto;
 import com.dp.jobtracker.model.dto.JobStatusUpdateDto;
 import com.dp.jobtracker.model.enumeration.JobStatus;
+import com.dp.jobtracker.exception.BadRequestException;
 import com.dp.jobtracker.security.UserPrincipal;
 import com.dp.jobtracker.service.JobApplicationService;
+
+import jakarta.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -26,6 +29,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDate;
+import java.util.Enumeration;
+import java.util.Set;
 
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.NO_CONTENT;
@@ -34,6 +39,16 @@ import static org.springframework.http.HttpStatus.NO_CONTENT;
 @RequestMapping("/api/applications")
 @Validated
 public class JobApplicationController {
+
+    private static final Set<String> ALLOWED_SEARCH_QUERY_PARAMS = Set.of(
+            "status",
+            "companyName",
+            "title",
+            "applicationDateFrom",
+            "applicationDateTo",
+            "page",
+            "size",
+            "sort");
 
     @Autowired
     private JobApplicationService service;
@@ -47,6 +62,7 @@ public class JobApplicationController {
 
     @GetMapping
     public Page<JobApplicationResponseDto> search(
+            HttpServletRequest request,
             @AuthenticationPrincipal UserPrincipal principal,
             @RequestParam(name = "status", required = false) JobStatus status,
             @RequestParam(name = "companyName", required = false) String companyName,
@@ -56,6 +72,13 @@ public class JobApplicationController {
             @RequestParam(name = "applicationDateTo", required = false)
             @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate applicationDateTo,
             Pageable pageable) {
+        Enumeration<String> paramNames = request.getParameterNames();
+        while (paramNames.hasMoreElements()) {
+            String name = paramNames.nextElement();
+            if (!ALLOWED_SEARCH_QUERY_PARAMS.contains(name)) {
+                throw new BadRequestException("Unknown query parameter: " + name);
+            }
+        }
         return service.search(principal.getId(), status, companyName, title, applicationDateFrom, applicationDateTo, pageable);
     }
 
